@@ -1,0 +1,69 @@
+body {
+    text-align: center;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td {
+    padding: 0px 8px 0px 8px;
+}
+
+textarea {
+    resize: none;
+    font-size: 14px;
+    border: none;
+}
+
+button {
+    margin: 5px;
+    padding: 5px;
+    background-color: #eee;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+h1 {
+    margin: 0px;
+}
+
+h2 {
+    font-size: 20px;
+    color: #aaa;
+}
+
+.plumbus {
+    display: block;
+    position: absolute;
+    left: -200px;
+}
+
+#word-box {
+    width: 600px;
+    height: 200px;
+    text-align: center;
+    color: #aaa;
+}
+
+#msg-box {
+    height: 20px;
+    padding-top: 10px;
+    color: green;
+}
+
+.letter-div {
+    height: 30px;
+}
+
+#letter-up {
+    height: 36px;
+    font-size: 30px;
+}
+
+#letters {
+    height: 24px;
+    font-size: 18px;
+}

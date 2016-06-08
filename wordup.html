@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>wordUP!</title>
+        <link rel="stylesheet" type="text/css" href="wordup.css">
+    </head>
+    <body>
+        <div class="plumbus" id="plumbus-one">
+            <img src="images/p1a.png">
+        </div>
+        <div>
+            <table>
+                <colgroup>
+                    <col span="1" style="width: 30%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 10%;">
+                </colgroup>
+                <tr>
+                    <td>
+                        <h1>WordUp!</h1>
+                    </td>
+                    <td>
+                        <h2>Spins:</h2>
+                    </td>
+                    <td>
+                        <h2 id="spin-box"></h2>
+                    </td>
+                    <td>
+                        <h2>Skips:</h2>
+                    </td>
+                    <td>
+                        <h2 id="skip-box"></h2>
+                    </td>
+                    <td>
+                        <h2>Points:</h2>
+                    </td>
+                    <td>
+                        <h2 id="point-box"></h2>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div>Take this and put it somewhere that mom can't find it.</div>
+        <div class="letter-div"><span id="letter-up" type="text"></span></div>
+        <div class="letter-div"><span id="letters"></span></div>
+        </div>
+        <div>
+            <button id="oh-yes">Oh Yes</button>
+            <button id="oh-no">Oh No</button>
+            <button id="spinner">Spin</button>
+            <button id="reset-btn">Restart</button>
+        </div>
+        <div>
+            <textarea id="msg-box"></textarea>
+        </div>
+        <div>
+            <textarea id="word-box"></textarea>
+        </div>
+        <script src="wordup.js"></script>
+    </body>
+</html>
