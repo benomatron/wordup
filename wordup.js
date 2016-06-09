@@ -1,8 +1,12 @@
-var ohYes = document.getElementById('oh-yes');
-var ohNo = document.getElementById('oh-no');
-var resetBtn = document.getElementById('reset-btn');
+window.onload = addListeners;
+
+////////////////////////////////////////////////////////////////////////
+// wordup
+////////////////////////////////////////////////////////////////////////
+
+// elements
+
 var letterList = document.getElementById('letters');
-var spinner = document.getElementById('spinner');
 var letterUp = document.getElementById('letter-up');
 var pointBox = document.getElementById('point-box');
 var skipBox = document.getElementById('skip-box');
@@ -10,47 +14,78 @@ var spinBox = document.getElementById('spin-box');
 var wordBox = document.getElementById('word-box');
 var msgBox = document.getElementById('msg-box');
 
-//
-var plumbusOne = document.getElementById('plumbus-one');
-var plumbusOneTimer = null;
+// internal vars
 
 var skips = 0;
 var points = 0;
 var spins = 0;
+var letterCount = 0;
 var totalWords = 50;
-var maxSpins = 5;
+var maxSpins = 6;
 var maxSkips = 3;
+var maxLetters = 5;
 
 var letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-var bucket = {};
+var letterBucket = {};
 var words = [];
 
-ohYes.onclick = addLetter;
-ohNo.onclick = skipLetter;
-spinner.onclick = spinThing;
-resetBtn.onclick = resetGame;
-plumbusOne.onclick = stopPlumbus;
+// buttons
 
-window.onload = addListeners;
+var noBtn = document.getElementById('oh-no');
+    noBtn.onclick = skipLetter;
+var resetBtn = document.getElementById('reset-btn');
+    resetBtn.onclick = resetGame;
+var finishBtn = document.getElementById('finish-btn');
+    finishBtn.onclick = finishGame;
+    finishBtn.setAttribute("disabled", "true");
+var spinBtn = document.getElementById('spin-btn');
+    spinBtn.onclick = spinThing;
+var yesBtn = document.getElementById('oh-yes');
+    yesBtn.onclick = addLetter;
 
 function resetGame() {
     skips = 0;
     spins = 0;
     points = 0;
-    bucket = {};
+    letterBucket = {};
     letterUp.textContent = '';
     letterList.textContent = '';
     makeWords(totalWords, 13, 7);
     updateHead();
 }
 
-function testMove() {
-    moveThing(plumbusOne, plumbusOneTimer);
+function finishGame() {
+    var tally = 0;
+    for (i in letterBucket) {
+        for (var j = 0; j < words.length; j++) {
+            if (words[j].indexOf(letterBucket[i]) !== -1) {
+                points++;
+            }
+        }
+    }
+    updateHead();
+    if (playPlumbi) {
+        testMove();
+    }
 }
 
-function stopPlumbus() {
-    clearInterval(plumbusOneTimer);
+function spinsMaxed() {
+    if (letterCount <= maxLetters) {
+        updateLetter();
+        addLetter();
+    }
+    disableButtons();
+    makeMessage('You ran out of spins, bitch!', 'bad');
 }
+
+function disableButtons() {
+    finishBtn.removeAttribute("disabled");
+    noBtn.setAttribute("disabled", "true");
+    yesBtn.setAttribute("disabled", "true");
+    //resetBtn.setAttribute("disabled", "true");
+    spinBtn.setAttribute("disabled", "true");
+}
+
 
 function makeWords(numWords, maxLength, minLength) {
     words = [];
@@ -64,21 +99,31 @@ function makeWords(numWords, maxLength, minLength) {
 }
 
 function updateHead() {
+    if (spins >= maxSpins) {
+        spinsMaxed();
+    }
     pointBox.textContent = points;
+    if (points) {
+        pointBox.className = "finished";
+        pointBox.textContent = '+ ' + points + ' !!!';
+    }
     skipBox.textContent = maxSkips - skips;
     spinBox.textContent = maxSpins - spins;
+
 }
 
 function addLetter() {
     var letter = letterUp.textContent;
     var crapple = '';
     if (letter) {
-        bucket[letter] = letter;
-        for (i in bucket) {
+        letterBucket[letter] = letter;
+        for (i in letterBucket) {
             crapple = crapple + i + '-';
         }
+        letterCount++;
         letterList.textContent = crapple.slice(0, crapple.length-1);
         letterUp.textContent = '';
+        updateHead();
     } else {
         makeMessage('You gotta spin it, bitch!', 'ok');
     }
@@ -98,14 +143,20 @@ function skipLetter() {
     }
 }
 
-function spinThing() {
+function updateLetter() {
     var i;
-    while (bucket[letters[i]] || i == null) {
+    if (spins < maxSpins) {
+        spins += 1;
+    }
+    while (letterBucket[letters[i]] || i == null) {
         i = Math.floor(Math.random() * (26 - 0)) + 0;
     }
-    spins += 1;
     letterUp.textContent = letters[i];
+}
+
+function spinThing() {
     clearMessage();
+    updateLetter();
     updateHead();
 }
 
@@ -135,6 +186,29 @@ function createWord(length) {
     }
     return word;
 }
+
+////////////////////////////////////////////////////////////////////////
+// plumbi paulpants
+////////////////////////////////////////////////////////////////////////
+
+// plumbus things
+
+var playPlumbi = true;
+
+var plumbusOne = document.getElementById('plumbus-one');
+var plumbusOneTimer = null;
+plumbusOne.onclick = stopPlumbus;
+
+function testMove() {
+    playPlumbi = false;
+    moveThing(plumbusOne, plumbusOneTimer);
+}
+
+
+function stopPlumbus() {
+    clearInterval(plumbusOneTimer);
+}
+
 
 function moveThing(elem, timer) {
 
@@ -203,14 +277,3 @@ function divMove(e){
   plumbusOne.style.top = e.clientY + 'px';
   plumbusOne.style.left = e.clientX + 'px';
 }
-
-/*
-function genCharArray(charA, charZ) {
-    var a = [], i = charA.charCodeAt(0), j = charZ.charCodeAt(0);
-    for (; i <= j; ++i) {
-        a.push(String.fromCharCode(i));
-    }
-    return a;
-}
-genCharArray('a', 'z');
-*/

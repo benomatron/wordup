@@ -41,6 +41,15 @@ h2 {
     left: -200px;
 }
 
+.help-text {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.finished {
+    color: green;
+}
+
 #word-box {
     width: 600px;
     height: 200px;
@@ -49,8 +58,10 @@ h2 {
 }
 
 #msg-box {
-    height: 20px;
+    width: 600px;
+    height: 30px;
     padding-top: 10px;
+    text-align: center;
     color: green;
 }
 
