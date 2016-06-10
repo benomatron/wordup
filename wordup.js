@@ -68,9 +68,7 @@ function finishGame() {
         }
     }
     updateHead();
-    if (playPlumbi) {
-        testMove();
-    }
+    playPlumbi();
 }
 
 function spinsMaxed() {
@@ -204,10 +202,8 @@ function createWord(length) {
 // if plumbus hits paulpants mouth it flashes and disappears
 // when plumbus are gone paulpants poos and walks off screen
 
-var playPlumbi = true;
-
-var wHeight = document.body.scrollHeight;
-var wWidth = document.body.scrollWidth;
+var wHeight = document.documentElement.clientHeight;
+var wWidth = document.documentElement.clientWidth;
 
 /*
 window.onscroll = function() {
@@ -219,95 +215,112 @@ window.onscroll = function() {
 
 var killX = -1000;
 var killY = -1000;
-var baseSpeed = 3;
-var r = 100;
+var baseSpeed = 14;
+var r = 20;
+var plumbusCount = 0;
 
 var plumbi = {
-    plumbusOne: {xid: 'p-one', timerId: 0, image: "images/ok/p1.gif", xp: 100, yp: 100, w: 80, h: 120},
-    plumbusTwo: {xid: 'p-two', timerId: 0, image: "images/ok/p2.gif", xp: 300, yp: 300, w: 80, h: 120}
+    p1: {xid: 'p-1', timerId: 0, image: "images/ok/p1.gif", di: "images/ok/x.png", w: 80, h: 120},
+    p2: {xid: 'p-2', timerId: 0, image: "images/ok/p2.gif", di: "images/ok/x.png", w: 80, h: 120},
+    p3: {xid: 'p-3', timerId: 0, image: "images/ok/p3.gif", di: "images/ok/x.png", w: 80, h: 120},
+    p4: {xid: 'p-4', timerId: 0, image: "images/ok/p4.gif", di: "images/ok/x.png", w: 80, h: 120},
+    p5: {xid: 'p-5', timerId: 0, image: "images/ok/p5.gif", di: "images/ok/x.png", w: 80, h: 120},
+    p6: {xid: 'p-6', timerId: 0, image: "images/ok/p6.gif", di: "images/ok/x.png", w: 80, h: 120},
+    p7: {xid: 'p-7', timerId: 0, image: "images/ok/p1.gif", di: "images/ok/x.png", w: 80, h: 120},
+    p8: {xid: 'p-8', timerId: 0, image: "images/ok/p2.gif", di: "images/ok/x.png", w: 80, h: 120},
+    p9: {xid: 'p-9', timerId: 0, image: "images/ok/p3.gif", di: "images/ok/x.png", w: 80, h: 120},
+    p10: {xid: 'p-10', timerId: 0, image: "images/ok/p4.gif", di: "images/ok/x.png",  w: 80, h: 120}
 };
 
-function readyReady() {
-    cursor: url("images/ok/paddle.gif");
+function playPlumbi() {
+    var startTime = 14000;
+    var delayTime = 10000;
+    var nextTime = 14000;
+
+    setTimeout(function () {
+        startPaulPants();
+    }, startTime * 2.5);
+
+    for (var p in plumbi) {
+        doSetTimeout(plumbi[p], nextTime);
+        delayTime = Math.floor(delayTime + 2300);
+        nextTime = startTime + delayTime;
+    }
+
+    function doSetTimeout(p, i) {
+        setTimeout(function() {
+            createPlumbus(p);
+        }, i);
+    }
 }
 
 var t1 = document.getElementById('t1');
 t1.addEventListener('click', function(){
-    createPlumbus(plumbi['plumbusOne']);
+    createPlumbus(plumbi['p1']);
 });
 
 var t2 = document.getElementById('t2');
 t2.addEventListener('click', function(){
-    startPaulPants();
+    playPlumbi();
 });
 
 var t3 = document.getElementById('t3');
 t3.addEventListener('click', function(){
-    stopPlumbus(plumbi['plumbusOne'].timerId);
+    stopPlumbus(plumbi['p1'].timerId);
 });
 
 function stopPlumbus(id) {
     clearInterval(id);
 }
 
+function startNum() {
+    var x = Math.ceil(Math.random() * 2);
+    if (x % 2) {
+        return -1;
+    }
+    return 1;
+}
 function createPlumbus(plumbus) {
-    //var plumbusImg = document.createElement('div');
-    //plumbusImg.id = plumbus.divId;
-    //plumbusImg.className = 'plumbus';
-
-    //var image = document.createElement('img');
-//    image.id = plumbus.id;
-//    image.src = plumbus.image;
-//    image.height = 100;
-//    image.width = 60;
 
     var plumbusImg = document.createElement('img');
+    var yp = Math.max(Math.floor(Math.random() * wHeight), 1);
+    var sx = startNum();
+    var sy = startNum();
+
     plumbusImg.id = plumbus.xid;
     plumbusImg.src = plumbus.image;
     plumbusImg.height = plumbus.h;
     plumbusImg.width = plumbus.w;
     plumbusImg.style.position="absolute";
-
-    //plumbusImg.appendChild(image);
-    plumbusImg.style.left = plumbus.xp + 'px';
-    plumbusImg.style.top = plumbus.yp + 'px';
-
-    plumbusImg.style.border = "1px solid #000000";
+    plumbusImg.style.left = 0 + 'px';
+    plumbusImg.style.top = yp + 'px';
+    plumbusImg.style.zIndex = 1000;
+    //plumbusImg.style.border = "1px solid #000000";
     plumbusImg.addEventListener('click', function(e) {
         bouncePlumbus(e);
     });
 
     document.body.appendChild(plumbusImg);
-
-    movePlumbus(plumbus, 1, 1, baseSpeed);
-}
-
-function killPlumbus(plumbus) {
-    var plumbusImg = document.getElementById(plumbus.divId);
-    plumbusImg.remove();
+    plumbusCount++;
+    movePlumbus(plumbus, sx, sy, baseSpeed);
 }
 
 function startPaulPants() {
-    var pWidth = 400;
-    var pHeight = 400;
+    var pWidth = 864;
+    var pHeight = 648;
     var paulPants = document.createElement('img');
     paulPants.id = 'paul-pants';
-    paulPants.src = 'images/ok/paulpants.gif';
+    paulPants.src = 'images/ok/paulpants_walk.gif';
     paulPants.height = pHeight;
     paulPants.width = pWidth;
     paulPants.style.position="absolute";
-
-    //paulPants.appendChild(image);
     paulPants.style.left = '-1000px';
-    paulPants.style.top = '200px';
-    paulPants.style.border = "1px solid #000000";
-    //paulPants.addEventListener('click', function(e) {
-    //    bouncePlumbus(e);
-    //});
+    paulPants.style.top = '70px';
+    paulPants.style.zIndex = 500;
 
     document.body.appendChild(paulPants);
 
-    var paulTimer = setInterval(paulMove, baseSpeed);
+    var paulTimer = setInterval(paulMove, 20);
     var leftPos = -300;
     var endPoint = wWidth / 2 - pWidth / 2;
 
@@ -319,15 +332,16 @@ function startPaulPants() {
             clearInterval(paulTimer);
             killX = Math.floor(wWidth / 2);
             killY = 200; Math.floor(wHeight / 2);
-            var kz = document.createElement('img');
-            kz.id = 'kz';
-            kz.src = 'images/ok/kz.png';
-            kz.style.position="absolute";
-            kz.height = r*2;
-            kz.width = r*2;
-            kz.style.left = killX - r + 'px';
-            kz.style.top = killY + r + 'px';
-            document.body.appendChild(kz);
+            paulPants.src = 'images/ok/paulpants_stand.gif';
+
+            var wordUp = document.getElementById('word-up-all');
+            wordUp.style.display = 'none';
+
+            var ppHead = document.getElementById('pp-header');
+            ppHead.style.top = '20px';
+            ppHead.style.display = 'block';
+
+
 
         }
 
@@ -338,17 +352,12 @@ function startPaulPants() {
 
 function movePlumbus(plumbus, xRate, yRate, speed) {
 
-    console.log('p = ', plumbus);
-
     var elem = document.getElementById(plumbus.xid);
-    //var init = true, leftPos, topPos;
-
     var leftPos = elem.x;
     var topPos = elem.y;
 
     function isDead(xPos, yPos) {
-        if (xPos > killX - r && xPos < killX + r && yPos > killY && yPos > killY + r) {
-            console.log('DEAD');
+        if (xPos > killX - r && xPos < killX + r && yPos > killY && yPos < killY + r) {
             return true;
         }
         return false;
@@ -359,17 +368,38 @@ function movePlumbus(plumbus, xRate, yRate, speed) {
         leftPos += xRate;
         topPos += yRate;
 
-        if (leftPos > wWidth - plumbus.w || leftPos < 0) {
-            xRate = xRate * -1;
+        if (leftPos >= wWidth - plumbus.w) {
+            xRate = Math.min(xRate, xRate * -1);
+        } else if (leftPos <= 0) {
+            xRate = Math.max(xRate, xRate * -1);
         }
 
-        if (topPos > wHeight - plumbus.h || topPos < 0) {
-            yRate = yRate * -1;
+        if (topPos >= wHeight - plumbus.h) {
+            yRate = Math.min(yRate, yRate * -1);
+        } else if (topPos <= 0) {
+            yRate = Math.max(yRate, yRate * -1);
         }
 
         if (isDead(leftPos + plumbus.w / 2, topPos + plumbus.h / 2)) {
             clearInterval(plumbus.timerId);
             elem.removeEventListener('click', true);
+            elem.src = plumbus.di;
+            var pp = document.getElementById('paul-pants');
+            pp.src = 'images/ok/paulpants_happy.gif';
+            plumbusCount--;
+            setTimeout(function () {
+                elem.remove();
+                if (plumbusCount > 0) {
+                    var px = document.getElementById('paul-pants');
+                    px.src = 'images/ok/paulpants_stand.gif';
+                }
+            }, 3000);
+
+            if (plumbusCount <= 0) {
+                document.getElementById('pp-img').src = 'images/ok/banner_win.png';
+                var px = document.getElementById('paul-pants');
+                px.src = 'images/ok/paulpants_poo.gif';
+            }
         }
 
         elem.style.left = leftPos + 'px';
@@ -384,9 +414,9 @@ function bouncePlumbus(ev) {
     function niceNumb(num) {
         var x = 1;
         if (num < 1) {
-            x = Math.floor(num);
+            x = Math.max(Math.floor(num), -3);
         } else if (num > 0) {
-            x = Math.ceil(num);
+            x = Math.min(Math.ceil(num), 3);
         }
         return x;
     }
@@ -400,13 +430,12 @@ function bouncePlumbus(ev) {
 
     var xOff = (cx - tx) / 10 * -1;
     var yOff = (cy - ty) / 10 * -1;
-
-    var randSpeed = Math.floor(Math.random() * 10 + 20);
+    //console.log('tx = ', tx, ' ty = ', ty, ' cx = ', cx, ' cy = ', cy, ' xO = ', xOff, ' yO = ', yOff);
+    //debugger;
+    var randSpeed = Math.floor(Math.random() * 10 + 10);
 
     xOff = niceNumb(xOff);
     yOff = niceNumb(yOff);
-
-    console.log('xs = ', xOff, 'ys = ', yOff, ' s = ', randSpeed);
 
     for (var p in plumbi) {
         var bp = plumbi[p];
@@ -418,7 +447,6 @@ function bouncePlumbus(ev) {
 }
 
 function addListeners(){
-    console.log('ok');
    // document.getElementById('plumbus-one').addEventListener('mousedown', mouseDown, false);
    // window.addEventListener('mouseup', mouseUp, false);
 

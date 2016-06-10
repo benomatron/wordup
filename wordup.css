@@ -82,6 +82,10 @@ h2 {
     font-size: 18px;
 }
 
+#pp-header {
+    display: none;
+}
+
 .paddling {
     cursor: url("images/ok/paddle.png");
 }

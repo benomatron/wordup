@@ -5,49 +5,53 @@
         <link rel="stylesheet" type="text/css" href="wordup.css">
     </head>
     <body>
-        <div>
-            <table>
-                <colgroup>
-                    <col span="1" style="width: 30%;">
-                    <col span="1" style="width: 10%;">
-                    <col span="1" style="width: 10%;">
-                    <col span="1" style="width: 10%;">
-                    <col span="1" style="width: 10%;">
-                    <col span="1" style="width: 10%;">
-                    <col span="1" style="width: 10%;">
-                    <col span="1" style="width: 10%;">
-                </colgroup>
-                <tr>
-                    <td><h1>WordUp!</h1></td>
-                    <td><h2>Spins:</h2></td>
-                    <td><h2 id="spin-box"></h2></td>
-                    <td><h2>Skips:</h2></td>
-                    <td><h2 id="skip-box"></h2></td>
-                    <td><h2>Points:</h2></td>
-                    <td><h2 id="point-box"></h2></td>
-                </tr>
-            </table>
-        </div>
-        <div class="letter-div"><span id="letter-up" type="text"></span></div>
-        <div class="letter-div"><span id="letters"></span></div>
-        </div>
-        <div class="btn-grp">
-            <button id="oh-yes">Oh Yes</button>
-            <button id="oh-no">Oh No</button>
-            <button id="spin-btn">Spin</button>
-            <button id="reset-btn">Restart</button>
-            <button id="finish-btn">Finish</button>
+        <div id="word-up-all">
+            <div>
+                <table>
+                    <colgroup>
+                        <col span="1" style="width: 30%;">
+                        <col span="1" style="width: 10%;">
+                        <col span="1" style="width: 10%;">
+                        <col span="1" style="width: 10%;">
+                        <col span="1" style="width: 10%;">
+                        <col span="1" style="width: 10%;">
+                        <col span="1" style="width: 10%;">
+                        <col span="1" style="width: 10%;">
+                    </colgroup>
+                    <tr>
+                        <td><h1>WordUp!</h1></td>
+                        <td><h2>Spins:</h2></td>
+                        <td><h2 id="spin-box"></h2></td>
+                        <td><h2>Skips:</h2></td>
+                        <td><h2 id="skip-box"></h2></td>
+                        <td><h2>Points:</h2></td>
+                        <td><h2 id="point-box"></h2></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="letter-div"><span id="letter-up" type="text"></span></div>
+            <div class="letter-div"><span id="letters"></span></div>
+            <div class="btn-grp">
+                <button id="oh-yes">Oh Yes</button>
+                <button id="oh-no">Oh No</button>
+                <button id="spin-btn">Spin</button>
+                <button id="reset-btn">Restart</button>
+                <button id="finish-btn">Finish</button>
 
-            <button id="t1">T1</button>
-            <button id="t2">T2</button>
-            <button id="t3">T3</button>
+                <button id="t1">T1</button>
+                <button id="t2">T2</button>
+                <button id="t3">T3</button>
+            </div>
+            <div class="help-text">Take this and put it somewhere that mom can't find it.</div>
+            <div>
+                <textarea id="msg-box" disabled></textarea>
+            </div>
+            <div>
+                <textarea id="word-box" disabled></textarea>
+            </div>
         </div>
-        <div class="help-text">Take this and put it somewhere that mom can't find it.</div>
-        <div>
-            <textarea id="msg-box" disabled></textarea>
-        </div>
-        <div>
-            <textarea id="word-box" disabled></textarea>
+        <div id="pp-header">
+            <img id="pp-img" src="images/ok/banner.png" alt="">
         </div>
         <script src="wordup.js"></script>
     </body>
