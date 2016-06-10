@@ -206,9 +206,25 @@ function createWord(length) {
 
 var playPlumbi = true;
 
+var wHeight = document.body.scrollHeight;
+var wWidth = document.body.scrollWidth;
+
+/*
+window.onscroll = function() {
+    wHeight = window.innerHeight;
+    wWidth = window.innerWidth;
+    console.log('scroll h = ', wHeight, ' w = ', wWidth);
+}
+*/
+
+var killX = -1000;
+var killY = -1000;
+var baseSpeed = 3;
+var r = 100;
+
 var plumbi = {
-    plumbusOne: {xid: 'p-one', timerId: 0, image: "images/ok/p1.gif", xp: 100, yp: 100},
-    plumbusTwo: {xid: 'p-two', timerId: 0, image: "images/ok/p2.gif", xp: 300, yp: 300}
+    plumbusOne: {xid: 'p-one', timerId: 0, image: "images/ok/p1.gif", xp: 100, yp: 100, w: 80, h: 120},
+    plumbusTwo: {xid: 'p-two', timerId: 0, image: "images/ok/p2.gif", xp: 300, yp: 300, w: 80, h: 120}
 };
 
 function readyReady() {
@@ -248,8 +264,8 @@ function createPlumbus(plumbus) {
     var plumbusImg = document.createElement('img');
     plumbusImg.id = plumbus.xid;
     plumbusImg.src = plumbus.image;
-    plumbusImg.height = 100;
-    plumbusImg.width = 60;
+    plumbusImg.height = plumbus.h;
+    plumbusImg.width = plumbus.w;
     plumbusImg.style.position="absolute";
 
     //plumbusImg.appendChild(image);
@@ -263,7 +279,7 @@ function createPlumbus(plumbus) {
 
     document.body.appendChild(plumbusImg);
 
-    movePlumbus(plumbus, 1, 1, 10);
+    movePlumbus(plumbus, 1, 1, baseSpeed);
 }
 
 function killPlumbus(plumbus) {
@@ -272,17 +288,18 @@ function killPlumbus(plumbus) {
 }
 
 function startPaulPants() {
+    var pWidth = 400;
+    var pHeight = 400;
     var paulPants = document.createElement('img');
     paulPants.id = 'paul-pants';
     paulPants.src = 'images/ok/paulpants.gif';
-    paulPants.height = 300;
-    paulPants.width = 300;
+    paulPants.height = pHeight;
+    paulPants.width = pWidth;
     paulPants.style.position="absolute";
 
     //paulPants.appendChild(image);
-    paulPants.style.left = 100;
-    paulPants.style.top = 300;
-
+    paulPants.style.left = '-1000px';
+    paulPants.style.top = '200px';
     paulPants.style.border = "1px solid #000000";
     //paulPants.addEventListener('click', function(e) {
     //    bouncePlumbus(e);
@@ -290,9 +307,9 @@ function startPaulPants() {
 
     document.body.appendChild(paulPants);
 
-    var paulTimer = setInterval(paulMove, 10);
-    var leftPos = 0;
-    var endPoint = 500;
+    var paulTimer = setInterval(paulMove, baseSpeed);
+    var leftPos = -300;
+    var endPoint = wWidth / 2 - pWidth / 2;
 
     function paulMove() {
 
@@ -300,6 +317,18 @@ function startPaulPants() {
             leftPos++;
         } else if (leftPos >= endPoint) {
             clearInterval(paulTimer);
+            killX = Math.floor(wWidth / 2);
+            killY = 200; Math.floor(wHeight / 2);
+            var kz = document.createElement('img');
+            kz.id = 'kz';
+            kz.src = 'images/ok/kz.png';
+            kz.style.position="absolute";
+            kz.height = r*2;
+            kz.width = r*2;
+            kz.style.left = killX - r + 'px';
+            kz.style.top = killY + r + 'px';
+            document.body.appendChild(kz);
+
         }
 
         paulPants.style.left = leftPos + 'px';
@@ -317,24 +346,37 @@ function movePlumbus(plumbus, xRate, yRate, speed) {
     var leftPos = elem.x;
     var topPos = elem.y;
 
-    plumbus.timerId = setInterval(frame, speed);
+    function isDead(xPos, yPos) {
+        if (xPos > killX - r && xPos < killX + r && yPos > killY && yPos > killY + r) {
+            console.log('DEAD');
+            return true;
+        }
+        return false;
+    }
 
     function frame() {
 
         leftPos += xRate;
         topPos += yRate;
 
-        if (leftPos > 1000 || leftPos < 0) {
+        if (leftPos > wWidth - plumbus.w || leftPos < 0) {
             xRate = xRate * -1;
         }
 
-        if (topPos > 400 || topPos < 0) {
+        if (topPos > wHeight - plumbus.h || topPos < 0) {
             yRate = yRate * -1;
+        }
+
+        if (isDead(leftPos + plumbus.w / 2, topPos + plumbus.h / 2)) {
+            clearInterval(plumbus.timerId);
+            elem.removeEventListener('click', true);
         }
 
         elem.style.left = leftPos + 'px';
         elem.style.top = topPos + 'px';
     }
+
+    plumbus.timerId = setInterval(frame, speed);
 }
 
 function bouncePlumbus(ev) {
@@ -359,7 +401,7 @@ function bouncePlumbus(ev) {
     var xOff = (cx - tx) / 10 * -1;
     var yOff = (cy - ty) / 10 * -1;
 
-    var randSpeed = Math.floor(Math.random() * 10 + 10);
+    var randSpeed = Math.floor(Math.random() * 10 + 20);
 
     xOff = niceNumb(xOff);
     yOff = niceNumb(yOff);
