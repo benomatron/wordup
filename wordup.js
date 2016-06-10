@@ -222,7 +222,7 @@ t1.addEventListener('click', function(){
 
 var t2 = document.getElementById('t2');
 t2.addEventListener('click', function(){
-    createPlumbus(plumbi['plumbusTwo']);
+    startPaulPants();
 });
 
 var t3 = document.getElementById('t3');
@@ -269,6 +269,42 @@ function createPlumbus(plumbus) {
 function killPlumbus(plumbus) {
     var plumbusImg = document.getElementById(plumbus.divId);
     plumbusImg.remove();
+}
+
+function startPaulPants() {
+    var paulPants = document.createElement('img');
+    paulPants.id = 'paul-pants';
+    paulPants.src = 'images/ok/paulpants.gif';
+    paulPants.height = 300;
+    paulPants.width = 300;
+    paulPants.style.position="absolute";
+
+    //paulPants.appendChild(image);
+    paulPants.style.left = 100;
+    paulPants.style.top = 300;
+
+    paulPants.style.border = "1px solid #000000";
+    //paulPants.addEventListener('click', function(e) {
+    //    bouncePlumbus(e);
+    //});
+
+    document.body.appendChild(paulPants);
+
+    var paulTimer = setInterval(paulMove, 10);
+    var leftPos = 0;
+    var endPoint = 500;
+
+    function paulMove() {
+
+        if (leftPos < endPoint) {
+            leftPos++;
+        } else if (leftPos >= endPoint) {
+            clearInterval(paulTimer);
+        }
+
+        paulPants.style.left = leftPos + 'px';
+    }
+
 }
 
 function movePlumbus(plumbus, xRate, yRate, speed) {
