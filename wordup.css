@@ -38,7 +38,6 @@ h2 {
 .plumbus {
     display: block;
     position: absolute;
-    left: -200px;
 }
 
 .help-text {
@@ -55,6 +54,10 @@ h2 {
     height: 200px;
     text-align: center;
     color: #aaa;
+}
+
+#word-box:hover {
+    cursor: url('images/ok/paddle.png');
 }
 
 #msg-box {
@@ -77,4 +80,8 @@ h2 {
 #letters {
     height: 24px;
     font-size: 18px;
+}
+
+.paddling {
+    cursor: url("images/ok/paddle.png");
 }

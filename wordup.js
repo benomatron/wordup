@@ -43,6 +43,10 @@ var spinBtn = document.getElementById('spin-btn');
 var yesBtn = document.getElementById('oh-yes');
     yesBtn.onclick = addLetter;
 
+function doDebug() {
+    debugger;
+}
+
 function resetGame() {
     skips = 0;
     spins = 0;
@@ -193,68 +197,152 @@ function createWord(length) {
 
 // plumbus things
 
+// multiple plumbus arrive on screen and bounce around
+// paul pants walks out
+// cursor turns to paddle
+// contact with plumbus changes its vector
+// if plumbus hits paulpants mouth it flashes and disappears
+// when plumbus are gone paulpants poos and walks off screen
+
 var playPlumbi = true;
 
-var plumbusOne = document.getElementById('plumbus-one');
-var plumbusOneTimer = null;
-plumbusOne.onclick = stopPlumbus;
+var plumbi = {
+    plumbusOne: {xid: 'p-one', timerId: 0, image: "images/ok/p1.gif", xp: 100, yp: 100},
+    plumbusTwo: {xid: 'p-two', timerId: 0, image: "images/ok/p2.gif", xp: 300, yp: 300}
+};
 
-function testMove() {
-    playPlumbi = false;
-    moveThing(plumbusOne, plumbusOneTimer);
+function readyReady() {
+    cursor: url("images/ok/paddle.gif");
 }
 
+var t1 = document.getElementById('t1');
+t1.addEventListener('click', function(){
+    createPlumbus(plumbi['plumbusOne']);
+});
 
-function stopPlumbus() {
-    clearInterval(plumbusOneTimer);
+var t2 = document.getElementById('t2');
+t2.addEventListener('click', function(){
+    createPlumbus(plumbi['plumbusTwo']);
+});
+
+var t3 = document.getElementById('t3');
+t3.addEventListener('click', function(){
+    stopPlumbus(plumbi['plumbusOne'].timerId);
+});
+
+function stopPlumbus(id) {
+    clearInterval(id);
 }
 
+function createPlumbus(plumbus) {
+    //var plumbusImg = document.createElement('div');
+    //plumbusImg.id = plumbus.divId;
+    //plumbusImg.className = 'plumbus';
 
-function moveThing(elem, timer) {
+    //var image = document.createElement('img');
+//    image.id = plumbus.id;
+//    image.src = plumbus.image;
+//    image.height = 100;
+//    image.width = 60;
 
-    var left = 0;
-    var top = 0;
-    var moveLeft = true;
-    var moveDown = true;
-    plumbusOneTimer = setInterval(frame, 10); // draw every 10ms
+    var plumbusImg = document.createElement('img');
+    plumbusImg.id = plumbus.xid;
+    plumbusImg.src = plumbus.image;
+    plumbusImg.height = 100;
+    plumbusImg.width = 60;
+    plumbusImg.style.position="absolute";
+
+    //plumbusImg.appendChild(image);
+    plumbusImg.style.left = plumbus.xp + 'px';
+    plumbusImg.style.top = plumbus.yp + 'px';
+
+    plumbusImg.style.border = "1px solid #000000";
+    plumbusImg.addEventListener('click', function(e) {
+        bouncePlumbus(e);
+    });
+
+    document.body.appendChild(plumbusImg);
+
+    movePlumbus(plumbus, 1, 1, 10);
+}
+
+function killPlumbus(plumbus) {
+    var plumbusImg = document.getElementById(plumbus.divId);
+    plumbusImg.remove();
+}
+
+function movePlumbus(plumbus, xRate, yRate, speed) {
+
+    console.log('p = ', plumbus);
+
+    var elem = document.getElementById(plumbus.xid);
+    //var init = true, leftPos, topPos;
+
+    var leftPos = elem.x;
+    var topPos = elem.y;
+
+    plumbus.timerId = setInterval(frame, speed);
 
     function frame() {
 
-        if (moveLeft) {
-            left++;
-        } else {
-            left--;
+        leftPos += xRate;
+        topPos += yRate;
+
+        if (leftPos > 1000 || leftPos < 0) {
+            xRate = xRate * -1;
         }
 
-        if (moveDown) {
-            top++;
-        } else {
-            top--;
+        if (topPos > 400 || topPos < 0) {
+            yRate = yRate * -1;
         }
 
-        if (left > 1000) {
-            moveLeft = false;
-            //clearInterval(id);
-        } else if (left < 0) {
-            moveLeft = true;
+        elem.style.left = leftPos + 'px';
+        elem.style.top = topPos + 'px';
+    }
+}
+
+function bouncePlumbus(ev) {
+
+    function niceNumb(num) {
+        var x = 1;
+        if (num < 1) {
+            x = Math.floor(num);
+        } else if (num > 0) {
+            x = Math.ceil(num);
         }
+        return x;
+    }
 
-        if (top > 300) {
-            moveDown = false;
-            //clearInterval(id);
-        } else if (top < 0) {
-            moveDown = true;
+    var tg = ev.target;
+    var tx = Math.floor(tg.x + tg.width / 2);
+    var ty = Math.floor(tg.y + tg.height / 4);
+
+    var cx = ev.x;
+    var cy = ev.y;
+
+    var xOff = (cx - tx) / 10 * -1;
+    var yOff = (cy - ty) / 10 * -1;
+
+    var randSpeed = Math.floor(Math.random() * 10 + 10);
+
+    xOff = niceNumb(xOff);
+    yOff = niceNumb(yOff);
+
+    console.log('xs = ', xOff, 'ys = ', yOff, ' s = ', randSpeed);
+
+    for (var p in plumbi) {
+        var bp = plumbi[p];
+        if (bp.xid === tg.id) {
+            stopPlumbus(bp.timerId);
+            movePlumbus(bp, xOff, yOff, randSpeed);
         }
-
-        elem.style.top = top + 'px';
-        elem.style.left = left + 'px';
-
     }
 }
 
 function addListeners(){
-    document.getElementById('plumbus-one').addEventListener('mousedown', mouseDown, false);
-    window.addEventListener('mouseup', mouseUp, false);
+    console.log('ok');
+   // document.getElementById('plumbus-one').addEventListener('mousedown', mouseDown, false);
+   // window.addEventListener('mouseup', mouseUp, false);
 
 }
 
@@ -273,7 +361,7 @@ function divMove(e){
   //  div.style.position = 'absolute';
   //  div.style.top = e.clientY + 'px';
   //  div.style.left = e.clientX + 'px';
-  plumbusOne.style.position = 'absolute';
-  plumbusOne.style.top = e.clientY + 'px';
-  plumbusOne.style.left = e.clientX + 'px';
+  //plumbusOne.style.position = 'absolute';
+  //plumbusOne.style.top = e.clientY + 'px';
+  //plumbusOne.style.left = e.clientX + 'px';
 }
