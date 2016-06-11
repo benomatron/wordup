@@ -13,13 +13,14 @@ td {
 
 textarea {
     resize: none;
-    font-size: 14px;
+    font-size: 20px;
     border: none;
 }
 
 button {
-    margin: 5px;
-    padding: 5px;
+    margin: 15px;
+    padding: 15px;
+    font-size: 24px;
     background-color: #eee;
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -28,11 +29,13 @@ button {
 
 h1 {
     margin: 0px;
+    font-size: 62px;
+    color: #2DAD8D;
 }
 
 h2 {
-    font-size: 20px;
-    color: #aaa;
+    font-size: 32px;
+    color: #7A1DB8;
 }
 
 .plumbus {
@@ -41,7 +44,7 @@ h2 {
 }
 
 .help-text {
-    font-size: 12px;
+    font-size: 20px;
     color: #aaa;
 }
 
@@ -50,10 +53,10 @@ h2 {
 }
 
 #word-box {
-    width: 600px;
-    height: 200px;
+    width: 800px;
+    height: 300px;
     text-align: center;
-    color: #aaa;
+    color: #2B7DC4;
 }
 
 #word-box:hover {
@@ -63,23 +66,22 @@ h2 {
 #msg-box {
     width: 600px;
     height: 30px;
-    padding-top: 10px;
+    padding: 10px;
+    font-size: 32px;
     text-align: center;
-    color: green;
-}
-
-.letter-div {
-    height: 30px;
+    color: red;
 }
 
 #letter-up {
-    height: 36px;
-    font-size: 30px;
+    height: 120px;
+    font-size: 64px;
+    color: #2BBD1E;
 }
 
 #letters {
-    height: 24px;
-    font-size: 18px;
+    height: 100px;
+    font-size: 48px;
+    color: #AD582D;
 }
 
 #pp-header {
@@ -89,3 +91,15 @@ h2 {
 .paddling {
     cursor: url("images/ok/paddle.png");
 }
+
+.letter-table td {
+    height: 100px;
+    width: 150px;
+    padding: 20px;
+}
+
+.lab {
+    text-align: right;
+    font-size: 24px;
+}
+

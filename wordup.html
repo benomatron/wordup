@@ -29,20 +29,31 @@
                     </tr>
                 </table>
             </div>
-            <div class="letter-div"><span id="letter-up" type="text"></span></div>
-            <div class="letter-div"><span id="letters"></span></div>
+            <div class="letter-div">
+                <table class="letter-table">
+                    <colgroup>
+                        <col span="1" style="width: 20%;">
+                        <col span="1" style="width: 30%;">
+                        <col span="1" style="width: 20%;">
+                        <col span="1" style="width: 30%;">
+                    </colgroup>
+                    <tr>
+                        <td class="lab">Letter Up:</td>
+                        <td><span id="letter-up" type="text"></span></td>
+                        <td class="lab">Letters:</td>
+                        <td><span id="letters"></span></td>
+                    </tr>
+                </table>
+            </div>
             <div class="btn-grp">
-                <button id="oh-yes">Oh Yes</button>
-                <button id="oh-no">Oh No</button>
+                <button id="oh-yes">Add Letter</button>
+                <button id="oh-no">Skip Letter</button>
                 <button id="spin-btn">Spin</button>
                 <button id="reset-btn">Restart</button>
                 <button id="finish-btn">Finish</button>
 
-                <button id="t1">T1</button>
-                <button id="t2">T2</button>
-                <button id="t3">T3</button>
             </div>
-            <div class="help-text">Take this and put it somewhere that mom can't find it.</div>
+            <div class="help-text">Spin your thing and then get points for words.</div>
             <div>
                 <textarea id="msg-box" disabled></textarea>
             </div>

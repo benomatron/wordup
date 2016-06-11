@@ -1,4 +1,4 @@
-window.onload = addListeners;
+window.onload = resetGame;
 
 ////////////////////////////////////////////////////////////////////////
 // wordup
@@ -120,7 +120,7 @@ function addLetter() {
     if (letter) {
         letterBucket[letter] = letter;
         for (i in letterBucket) {
-            crapple = crapple + i + '-';
+            crapple = crapple + i + ' ';
         }
         letterCount++;
         letterList.textContent = crapple.slice(0, crapple.length-1);
@@ -216,30 +216,36 @@ window.onscroll = function() {
 var killX = -1000;
 var killY = -1000;
 var baseSpeed = 14;
-var r = 20;
+var r = 36;
 var plumbusCount = 0;
 
 var plumbi = {
-    p1: {xid: 'p-1', timerId: 0, image: "images/ok/p1.gif", di: "images/ok/x.png", w: 80, h: 120},
-    p2: {xid: 'p-2', timerId: 0, image: "images/ok/p2.gif", di: "images/ok/x.png", w: 80, h: 120},
-    p3: {xid: 'p-3', timerId: 0, image: "images/ok/p3.gif", di: "images/ok/x.png", w: 80, h: 120},
-    p4: {xid: 'p-4', timerId: 0, image: "images/ok/p4.gif", di: "images/ok/x.png", w: 80, h: 120},
-    p5: {xid: 'p-5', timerId: 0, image: "images/ok/p5.gif", di: "images/ok/x.png", w: 80, h: 120},
-    p6: {xid: 'p-6', timerId: 0, image: "images/ok/p6.gif", di: "images/ok/x.png", w: 80, h: 120},
-    p7: {xid: 'p-7', timerId: 0, image: "images/ok/p1.gif", di: "images/ok/x.png", w: 80, h: 120},
-    p8: {xid: 'p-8', timerId: 0, image: "images/ok/p2.gif", di: "images/ok/x.png", w: 80, h: 120},
-    p9: {xid: 'p-9', timerId: 0, image: "images/ok/p3.gif", di: "images/ok/x.png", w: 80, h: 120},
-    p10: {xid: 'p-10', timerId: 0, image: "images/ok/p4.gif", di: "images/ok/x.png",  w: 80, h: 120}
+    p1: {xid: 'p-1', timerId: 0, image: "images/ok/p1.gif", di: "images/ok/x.gif", w: 100, h: 150, del: false},
+    p2: {xid: 'p-2', timerId: 0, image: "images/ok/p2.gif", di: "images/ok/x.gif", w: 100, h: 150, del: false},
+    p3: {xid: 'p-3', timerId: 0, image: "images/ok/p3.gif", di: "images/ok/x.gif", w: 100, h: 150, del: false},
+    p4: {xid: 'p-4', timerId: 0, image: "images/ok/p4.gif", di: "images/ok/x.gif", w: 100, h: 150, del: false},
+    p5: {xid: 'p-5', timerId: 0, image: "images/ok/p5.gif", di: "images/ok/x.gif", w: 100, h: 150, del: false},
+    p6: {xid: 'p-6', timerId: 0, image: "images/ok/p6.gif", di: "images/ok/x.gif", w: 100, h: 150, del: false},
+    p7: {xid: 'p-7', timerId: 0, image: "images/ok/p1.gif", di: "images/ok/x.gif", w: 100, h: 150, del: false},
+    p8: {xid: 'p-8', timerId: 0, image: "images/ok/p2.gif", di: "images/ok/x.gif", w: 100, h: 150, del: false},
+    p9: {xid: 'p-9', timerId: 0, image: "images/ok/p3.gif", di: "images/ok/x.gif", w: 100, h: 150, del: false},
+    p10: {xid: 'p-10', timerId: 0, image: "images/ok/p4.gif", di: "images/ok/x.gif",  w: 100, h: 150, del: false}
 };
 
 function playPlumbi() {
-    var startTime = 14000;
-    var delayTime = 10000;
-    var nextTime = 14000;
+    var startTime = 12000; //14000
+    var delayTime = 10000; //10000;
+    var nextTime = 12000; //14000
+
+    plumbusCount = 0;
 
     setTimeout(function () {
         startPaulPants();
     }, startTime * 2.5);
+
+    var az = document.createElement('audio');
+    az.setAttribute('src', 'z.mp3');
+    az.play();
 
     for (var p in plumbi) {
         doSetTimeout(plumbi[p], nextTime);
@@ -254,19 +260,9 @@ function playPlumbi() {
     }
 }
 
-var t1 = document.getElementById('t1');
-t1.addEventListener('click', function(){
-    createPlumbus(plumbi['p1']);
-});
-
 var t2 = document.getElementById('t2');
 t2.addEventListener('click', function(){
     playPlumbi();
-});
-
-var t3 = document.getElementById('t3');
-t3.addEventListener('click', function(){
-    stopPlumbus(plumbi['p1'].timerId);
 });
 
 function stopPlumbus(id) {
@@ -280,6 +276,31 @@ function startNum() {
     }
     return 1;
 }
+
+
+function movePaddle(e) {
+    var el = document.getElementById('paddle');
+    el.style.left = e.x + 'px';
+    el.style.top = e.y + 'px';
+}
+
+function doPaddle() {
+
+    var paddle = document.createElement('img');
+    paddle.id = 'paddle';
+    paddle.src = 'images/ok/paddle.png';
+    paddle.height = 100;
+    paddle.width = 100;
+    paddle.style.position="absolute";
+    paddle.style.zIndex = 1000;
+
+    document.body.addEventListener('mousemove', function(e) {
+        movePaddle(e);
+    });
+
+    document.body.appendChild(paddle);
+}
+
 function createPlumbus(plumbus) {
 
     var plumbusImg = document.createElement('img');
@@ -296,7 +317,7 @@ function createPlumbus(plumbus) {
     plumbusImg.style.top = yp + 'px';
     plumbusImg.style.zIndex = 1000;
     //plumbusImg.style.border = "1px solid #000000";
-    plumbusImg.addEventListener('click', function(e) {
+    plumbusImg.addEventListener('mouseover', function(e) {
         bouncePlumbus(e);
     });
 
@@ -321,6 +342,10 @@ function startPaulPants() {
     document.body.appendChild(paulPants);
 
     var paulTimer = setInterval(paulMove, 20);
+    var audioElement = document.createElement('audio');
+    audioElement.setAttribute('src', 'pp.mp3');
+    audioElement.play();
+
     var leftPos = -300;
     var endPoint = wWidth / 2 - pWidth / 2;
 
@@ -331,7 +356,7 @@ function startPaulPants() {
         } else if (leftPos >= endPoint) {
             clearInterval(paulTimer);
             killX = Math.floor(wWidth / 2);
-            killY = 200; Math.floor(wHeight / 2);
+            killY = 200;
             paulPants.src = 'images/ok/paulpants_stand.gif';
 
             var wordUp = document.getElementById('word-up-all');
@@ -341,7 +366,7 @@ function startPaulPants() {
             ppHead.style.top = '20px';
             ppHead.style.display = 'block';
 
-
+           doPaddle();
 
         }
 
@@ -355,6 +380,9 @@ function movePlumbus(plumbus, xRate, yRate, speed) {
     var elem = document.getElementById(plumbus.xid);
     var leftPos = elem.x;
     var topPos = elem.y;
+    var angle = 0;
+    var aMax = Math.floor(Math.random() * 20 + 5);
+    var aDir = 1;
 
     function isDead(xPos, yPos) {
         if (xPos > killX - r && xPos < killX + r && yPos > killY && yPos < killY + r) {
@@ -367,6 +395,7 @@ function movePlumbus(plumbus, xRate, yRate, speed) {
 
         leftPos += xRate;
         topPos += yRate;
+        angle += aDir;
 
         if (leftPos >= wWidth - plumbus.w) {
             xRate = Math.min(xRate, xRate * -1);
@@ -380,20 +409,36 @@ function movePlumbus(plumbus, xRate, yRate, speed) {
             yRate = Math.max(yRate, yRate * -1);
         }
 
-        if (isDead(leftPos + plumbus.w / 2, topPos + plumbus.h / 2)) {
+        if (angle >= aMax) {
+            aDir = -1;
+        } else if (angle <= aMax * -1) {
+            aDir = 1;
+        }
+
+        elem.style.webkitTransform = 'rotate(' + angle + 'deg)';
+
+        if (isDead(leftPos + plumbus.w / 2, topPos + plumbus.h / 2) && !plumbus.del) {
+            plumbus.del = true;
             clearInterval(plumbus.timerId);
             elem.removeEventListener('click', true);
+            //elem.width = 120;
+            //elem.height = 60;
             elem.src = plumbus.di;
+
             var pp = document.getElementById('paul-pants');
             pp.src = 'images/ok/paulpants_happy.gif';
             plumbusCount--;
             setTimeout(function () {
                 elem.remove();
+                plumbus.del = true;
                 if (plumbusCount > 0) {
                     var px = document.getElementById('paul-pants');
                     px.src = 'images/ok/paulpants_stand.gif';
                 }
             }, 3000);
+            var ay = document.createElement('audio');
+            ay.setAttribute('src', 'y.mp3');
+            ay.play();
 
             if (plumbusCount <= 0) {
                 document.getElementById('pp-img').src = 'images/ok/banner_win.png';
@@ -430,8 +475,6 @@ function bouncePlumbus(ev) {
 
     var xOff = (cx - tx) / 10 * -1;
     var yOff = (cy - ty) / 10 * -1;
-    //console.log('tx = ', tx, ' ty = ', ty, ' cx = ', cx, ' cy = ', cy, ' xO = ', xOff, ' yO = ', yOff);
-    //debugger;
     var randSpeed = Math.floor(Math.random() * 10 + 10);
 
     xOff = niceNumb(xOff);
@@ -444,30 +487,4 @@ function bouncePlumbus(ev) {
             movePlumbus(bp, xOff, yOff, randSpeed);
         }
     }
-}
-
-function addListeners(){
-   // document.getElementById('plumbus-one').addEventListener('mousedown', mouseDown, false);
-   // window.addEventListener('mouseup', mouseUp, false);
-
-}
-
-function mouseUp()
-{
-    window.removeEventListener('mousemove', divMove, true);
-}
-
-function mouseDown(e){
-  window.addEventListener('mousemove', divMove, true);
-}
-
-function divMove(e){
-  //debugger;
-  //  var div = document.getElementById('dxy');
-  //  div.style.position = 'absolute';
-  //  div.style.top = e.clientY + 'px';
-  //  div.style.left = e.clientX + 'px';
-  //plumbusOne.style.position = 'absolute';
-  //plumbusOne.style.top = e.clientY + 'px';
-  //plumbusOne.style.left = e.clientX + 'px';
 }
