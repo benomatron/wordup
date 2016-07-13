@@ -20,7 +20,7 @@ var skips = 0;
 var points = 0;
 var spins = 0;
 var letterCount = 0;
-var totalWords = 50;
+var totalWords = 100;
 var maxSpins = 6;
 var maxSkips = 3;
 var maxLetters = 5;
@@ -43,9 +43,6 @@ var spinBtn = document.getElementById('spin-btn');
 var yesBtn = document.getElementById('oh-yes');
     yesBtn.onclick = addLetter;
 
-function doDebug() {
-    debugger;
-}
 
 function resetGame() {
     skips = 0;
@@ -69,6 +66,7 @@ function finishGame() {
     }
     updateHead();
     playPlumbi();
+    finishBtn.setAttribute("disabled", "true");
 }
 
 function spinsMaxed() {
@@ -83,17 +81,18 @@ function spinsMaxed() {
 function disableButtons() {
     finishBtn.removeAttribute("disabled");
     noBtn.setAttribute("disabled", "true");
+    resetBtn.setAttribute("disabled", "true");
     yesBtn.setAttribute("disabled", "true");
-    //resetBtn.setAttribute("disabled", "true");
     spinBtn.setAttribute("disabled", "true");
 }
 
 
-function makeWords(numWords, maxLength, minLength) {
+function makeWords(numWords) {
     words = [];
-    wordText = '';
+    var wordText = '';
     for (var i = 0; i <= numWords; i++) {
-        var w = createWord(maxLength);
+        var randy = Math.floor(Math.random()*17999);
+        var w = wordums[randy];
         words.push(w);
         wordText = wordText + w + ' ';
     }
@@ -171,23 +170,6 @@ function clearMessage() {
     msgBox.textContent = '';
 }
 
-function createWord(length) {
-    var consonants = 'bcdfghjklmnpqrstvwxyz',
-        vowels = 'aeiou',
-        rand = function(limit) {
-            return Math.floor(Math.random()*limit);
-        },
-        i, word='', length = parseInt(length,10),
-        consonants = consonants.split(''),
-        vowels = vowels.split('');
-    for (i=0;i<length/2;i++) {
-        var randConsonant = consonants[rand(consonants.length)],
-            randVowel = vowels[rand(vowels.length)];
-        word += (i===0) ? randConsonant.toUpperCase() : randConsonant;
-        word += i*2<length-1 ? randVowel : '';
-    }
-    return word;
-}
 
 ////////////////////////////////////////////////////////////////////////
 // plumbi paulpants
@@ -204,14 +186,6 @@ function createWord(length) {
 
 var wHeight = document.documentElement.clientHeight;
 var wWidth = document.documentElement.clientWidth;
-
-/*
-window.onscroll = function() {
-    wHeight = window.innerHeight;
-    wWidth = window.innerWidth;
-    console.log('scroll h = ', wHeight, ' w = ', wWidth);
-}
-*/
 
 var killX = -1000;
 var killY = -1000;
@@ -260,10 +234,6 @@ function playPlumbi() {
     }
 }
 
-var t2 = document.getElementById('t2');
-t2.addEventListener('click', function(){
-    playPlumbi();
-});
 
 function stopPlumbus(id) {
     clearInterval(id);
